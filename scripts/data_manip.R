@@ -1,5 +1,5 @@
 # Read in the source data
-data <- read.csv(file.path(gv$data, "Complete Data.csv"), stringsAsFactor = FALSE)
+data <- read.csv(file.path(gv$data, "Complete Data_01.11.2013.csv"), stringsAsFactor = FALSE)
 
 # DATA CHECKS
 # Check primary key is unique
@@ -19,8 +19,7 @@ subset(this.data0, lenght.baseline != 1)
 # Make dates
 data$DATE <- as.Date(data$DATE, format = "%m/%d/%y")
 data <- transform(data, HORSE = paste("Horse", HORSE))
-data$HORSE <- factor(data$HORSE, levels = paste("Horse", 2:10))
-
+data$HORSE <- factor(data$HORSE, levels = paste("Horse", 1:9))
 
 # Check the varaible names
 table(data$HORSE, exclude = NA)
@@ -32,6 +31,9 @@ table(data$TEST.TYPE, exclude = NA)
 table(data$PARAMETER, exclude = NA)
 table(data$MEASURE.NUM, exclude = NA)
 table(data$UNIT, exclude = NA)
+
+# Replace degr. with C
+#data$UNIT[!is.na(data$UNIT) & data$UNIT == "degr."] <- "C"
 
 # MEANS OF MULTIPLE MEASURES
 # Which parameters have multiple measure?
@@ -83,7 +85,7 @@ this.data0 <- ddply(data, .(HORSE, STUDY.DAY.TARGET, PARAMETER, MEASURE.NUM), fu
   if(length(T0) !=1 | length(T1) != 1) return(NULL)
   
   new.rows <- x[1,]
-  new.rows$TREAT <- "NA"
+  new.rows$TREAT <- NA
   new.rows$PARAMETER <- paste0(new.rows$PARAMETER, '.te')
   #new.rows$numT0 <- length(T0)
   #new.rows$numT1 <- length(T1)
@@ -94,6 +96,23 @@ this.data0 <- ddply(data, .(HORSE, STUDY.DAY.TARGET, PARAMETER, MEASURE.NUM), fu
 
 data <- rbind(data, this.data0)
 
+# BASELINE VALUE
+this.data0 <- ddply(data, .(HORSE, TREAT, PARAMETER, MEASURE.NUM), function(x){
+  BL <- na.omit(x[x$STUDY.DAY.TARGET == 0, "VALUE"])
+#data.frame(LEN = length(BL), VAL = paste(BL, collapse = ", "))
+  data.frame(x, BL = rep(BL, length = nrow(x)))
+})
+
+data <- this.data0
+
+this.data0 <- ddply(data, .(HORSE, TREAT, STUDY.DAY.TARGET, PARAMETER), function(x){
+  BL.mean <- mean(x$BL, na.rm = TRUE)
+  return(data.frame(x, BL.mean = rep(BL.mean, nrow(x))))
+})
+data <- this.data0
+
+
 # SORT
 data <- ddply(data, .(HORSE, STUDY.DAY.TARGET, PARAMETER, TREAT, MEASURE.NUM), function(x){x})
 
+dput(data, file.path(gv$data, 'data.dput'))

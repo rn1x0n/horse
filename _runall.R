@@ -11,9 +11,11 @@ source(file.path(gv$script, "data_manip.R"))
 
 setwd(gv$scripts)
 spin("exploratory_plots.R")
+spin("analysis.R")
 
-unlink("figure", recursive = TRUE)
 unlink("*.Rmd")
 unlink("*.md")
 
 setwd(gv$root)
+
+unlink(file.path(gv$script, "figure"), recursive = TRUE)

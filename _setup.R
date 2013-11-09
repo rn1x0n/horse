@@ -11,6 +11,7 @@ gv$scripts <- file.path(gv$root, "scripts")
 pkg.needed <- c("ggplot2",
                 "plyr",
                 "xtable",
+                "stats",
                 "knitr")
 
 pkgs <- installed.packages()[,"Package"]
