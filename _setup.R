@@ -1,6 +1,8 @@
-# Set up global variables
-setwd(root)
+rm(list = ls())
+# Change this path to the location of this file
+root <- "/Users/Richard/Documents/R/horse"
 
+# Set up global variables
 gv <- list()
 gv$root <- root
 gv$data <- file.path(gv$root, "data")
@@ -9,6 +11,9 @@ gv$scripts <- file.path(gv$root, "scripts")
 
 # Install packages if needed then load
 pkg.needed <- c("ggplot2",
+                "grid",
+                "nlme",
+                #"lme4",
                 "plyr",
                 "xtable",
                 "stats",

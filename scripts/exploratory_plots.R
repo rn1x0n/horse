@@ -40,13 +40,13 @@ ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE)) +
 #' ### Change from baseline, for each treatment, averaged over horses, smoothed plot
 #+ echo = FALSE, fig.width = 18, fig.height = 8
 
-  p <- ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE, linetype = TREAT)) +
+p <- ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE, linetype = TREAT)) +
   facet_wrap(~ PARAMETER, nrow = 2) +
   stat_smooth()+
   xlab("Target study day") + ylab("Kg") +
   scale_linetype(guide = guide_legend(title = "Treatment"))
 
-  suppressMessages(print(p))
+suppressMessages(print(p))
 
 #' ### Change from baseline, for each treatment, averaged over horses, boxplot
 #+ echo = FALSE, fig.width = 18, fig.height = 8
@@ -73,7 +73,7 @@ ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE)) +
   geom_line() +
   xlab("Target study day") + ylab("Kg") +
   scale_linetype(guide = guide_legend(title = "Treatment"))
-  #coord_cartesian(ylim = ylim)
+#coord_cartesian(ylim = ylim)
 
 #' ### Within horse differences, change from baseline
 #' This is the treatment effect for each horse
@@ -96,7 +96,7 @@ ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE)) +
 
 #+ fig.width = 18, fig.height = 8
 
-  p <- ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE)) +
+p <- ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE)) +
   facet_wrap(~ PARAMETER, nrow = 2) +
   stat_smooth()+
   xlab("Target study day") + ylab("Kg") 
@@ -157,12 +157,12 @@ for(type in type.names){
   plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, "")
   plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, c("_", "-","ELISA", " 1", "\\mean deltabl"))
   
-p <- ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE)) +
-  facet_grid(HORSE ~ PARAMETER) +
-  geom_line(aes(linetype = TREAT)) +
-  xlab("Target study day") + ylab(unique(plot.data$UNIT)) +
-  scale_linetype(guide = guide_legend(title = "Treatment"))
-
+  p <- ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE)) +
+    facet_grid(HORSE ~ PARAMETER) +
+    geom_line(aes(linetype = TREAT)) +
+    xlab("Target study day") + ylab(unique(plot.data$UNIT)) +
+    scale_linetype(guide = guide_legend(title = "Treatment"))
+  
   print(p)
 }
 
@@ -170,21 +170,21 @@ p <- ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE)) +
 
 #+ fig.width = 4, fig.height = 4
 
-  for(type in type.names){
-    
-    plot.data <- subset(data, TEST.TYPE == type  & grepl("mean.deltabl$", PARAMETER))
-    plot.data$TREAT <- as.factor(plot.data$TREAT)
-    plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, "")
-    plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, c("_", "-","ELISA", " 1", "\\mean deltabl"))
-    
-p <- ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE, linetype = TREAT)) +
-  facet_wrap(~ PARAMETER) +
-  stat_smooth()+
-  xlab("Target study day") + ylab(unique(plot.data$UNIT)) +
-  scale_linetype(guide = guide_legend(title = "Treatment"))
-
-    suppressMessages(print(p))
-    
+for(type in type.names){
+  
+  plot.data <- subset(data, TEST.TYPE == type  & grepl("mean.deltabl$", PARAMETER))
+  plot.data$TREAT <- as.factor(plot.data$TREAT)
+  plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, "")
+  plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, c("_", "-","ELISA", " 1", "\\mean deltabl"))
+  
+  p <- ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE, linetype = TREAT)) +
+    facet_wrap(~ PARAMETER) +
+    stat_smooth()+
+    xlab("Target study day") + ylab(unique(plot.data$UNIT)) +
+    scale_linetype(guide = guide_legend(title = "Treatment"))
+  
+  suppressMessages(print(p))
+  
 }
 
 #' Box plots
@@ -197,12 +197,12 @@ for(type in type.names){
   plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, "")
   plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, c("_", "-","ELISA", " 1", "\\mean deltabl"))
   
-p <- ggplot(plot.data, aes(x = as.factor(STUDY.DAY.TARGET), y = VALUE, linetype = TREAT)) +
-  facet_wrap(~ PARAMETER) +
-  geom_boxplot(position = "dodge") + 
-  xlab("Target study day") + ylab(unique(plot.data$UNIT)) +
-  scale_linetype(guide = guide_legend(title = "Treatment"))
-suppressMessages(print(p))
+  p <- ggplot(plot.data, aes(x = as.factor(STUDY.DAY.TARGET), y = VALUE, linetype = TREAT)) +
+    facet_wrap(~ PARAMETER) +
+    geom_boxplot(position = "dodge") + 
+    xlab("Target study day") + ylab(unique(plot.data$UNIT)) +
+    scale_linetype(guide = guide_legend(title = "Treatment"))
+  suppressMessages(print(p))
 }
 #####################################################################
 #' ### Within horse differences
@@ -218,12 +218,12 @@ for(type in type.names){
   
   plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, "")
   plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, c(" ELISA", " 1", "\\mean te$"))
- 
+  
   ribbon.data <- data.frame(STUDY.DAY.TARGET = unique(plot.data$STUDY.DAY.TARGET))
   
-p <- ggplot(plot.data, aes(x = STUDY.DAY.TARGET)) +
-  facet_grid(HORSE ~ PARAMETER) 
- 
+  p <- ggplot(plot.data, aes(x = STUDY.DAY.TARGET)) +
+    facet_grid(HORSE ~ PARAMETER) 
+  
   if(type == "thermography"){
     p <- p + geom_ribbon(aes(ymin = -1.2, ymax = 1.2),  data = ribbon.data, fill = "grey")
   }
@@ -250,33 +250,33 @@ for(type in type.names){
   plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, c(" ELISA", " 1", "\\mean deltabl te$"))
   
   p <- ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE)) +
-  facet_grid(HORSE ~ PARAMETER) +
-  geom_line() +
-  xlab("Target study day") + ylab(unique(plot.data$UNIT)) +
-  scale_linetype(guide = guide_legend(title = "Treatment"))
+    facet_grid(HORSE ~ PARAMETER) +
+    geom_line() +
+    xlab("Target study day") + ylab(unique(plot.data$UNIT)) +
+    scale_linetype(guide = guide_legend(title = "Treatment"))
   print(p)
- 
+  
 }
 
 #####################################################################
 #' Loess smoother
 #+ fig.width = 4, fig.height = 4
 
-  for(type in type.names){
-    
-    plot.data <- subset(data, TEST.TYPE == type  & grepl("mean.deltabl.te$", PARAMETER))
-    plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, "")
-    plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, c("_", " ELISA", " 1", "\\mean deltabl te$"))
-    
-    
-p <- ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE)) +
-  facet_wrap(~ PARAMETER, nrow = 2) +
-      stat_smooth()+
-  xlab("Target study day") + ylab(unique(plot.data$UNIT)) #+ ggtitle(unique(plot.data$PARAMETER))
+for(type in type.names){
+  
+  plot.data <- subset(data, TEST.TYPE == type  & grepl("mean.deltabl.te$", PARAMETER))
+  plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, "")
+  plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, c("_", " ELISA", " 1", "\\mean deltabl te$"))
+  
+  
+  p <- ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE)) +
+    facet_wrap(~ PARAMETER, nrow = 2) +
+    stat_smooth()+
+    xlab("Target study day") + ylab(unique(plot.data$UNIT)) #+ ggtitle(unique(plot.data$PARAMETER))
   scale_linetype(guide = guide_legend(title = "Treatment"))
-
-    suppressMessages(print(p))
-  }
+  
+  suppressMessages(print(p))
+}
 
 #' Box plot
 #+ fig.width = 3, fig.height = 4
@@ -286,14 +286,14 @@ for(type in type.names){
   plot.data <- subset(data, TEST.TYPE == type  & grepl("mean.deltabl.te$", PARAMETER))
   plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, "")
   plot.data$PARAMETER <- par.rename(plot.data$PARAMETER, c("_", " ELISA", " 1", "\\mean deltabl te$"))
-    
-    p <- ggplot(plot.data, aes(x = as.factor(STUDY.DAY.TARGET), y = VALUE)) +
-      facet_wrap(~ PARAMETER, nrow = 2) +
-      geom_boxplot(position = "dodge") +
-      xlab("Target study day") + ylab(unique(plot.data$UNIT)) 
-      
-    suppressMessages(print(p))
-    
+  
+  p <- ggplot(plot.data, aes(x = as.factor(STUDY.DAY.TARGET), y = VALUE)) +
+    facet_wrap(~ PARAMETER, nrow = 2) +
+    geom_boxplot(position = "dodge") +
+    xlab("Target study day") + ylab(unique(plot.data$UNIT)) 
+  
+  suppressMessages(print(p))
+  
 }
 
 #####################################################################
@@ -398,6 +398,6 @@ ggplot(plot.data, aes(x = STUDY.DAY.TARGET, y = VALUE)) +
   geom_line() +
   geom_point() +
   xlab("Target study day") + ylab("") 
-  #scale_linetype(guide = guide_legend(title = "Treatment"))
+#scale_linetype(guide = guide_legend(title = "Treatment"))
 
 
